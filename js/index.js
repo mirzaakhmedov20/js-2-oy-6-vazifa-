@@ -54,7 +54,10 @@ document.addEventListener("DOMContentLoaded", function () {
   moreButtons.length && moreButtons.forEach(more => {
     more && more.addEventListener('click', function() {
        let id = this.getAttribute('data-id').substring(5);
-       console.log(id);
+       if (id){
+        let domain = window.location.href.substring(0,window.location.href.search('index'));
+        window.location.assign(`${domain}pages/about.html?id=${id}`)
+       }
     })
   })
 });

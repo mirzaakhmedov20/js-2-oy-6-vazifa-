@@ -1,4 +1,4 @@
-import { validate } from "./function.js";
+import { validate, getData, createCard } from "./function.js";
 
 const button = document.getElementById("button");
 const name = document.getElementById("name");
@@ -9,16 +9,9 @@ const type = document.getElementById("type");
 const desc = document.getElementById("desc");
 const img = document.getElementById("img");
 const form = document.getElementById("form");
-const dataWrapper = document.getElementById("dataWrapper");
+const dataWrapper = document.getElementById("data-wrapper");
 
-function getData() {
-  let data = [];
-  if (localStorage.getItem("cars")) {
-    data = JSON.parse(localStorage.getItem("cars"));
-  }
-  return data;
-}
-
+// Formadagi ma'lumotni saqlash
 button &&
   button.addEventListener("click", function (e) {
     e.preventDefault();
@@ -39,8 +32,29 @@ button &&
       data.push(car);
       localStorage.setItem("cars", JSON.stringify(data));
 
+      let card = createCard(car);
+      dataWrapper.innerHTML += card;
+
       form.reset();
     } else {
       console.log("Validatsiyadan o'tmadi");
     }
   });
+
+// sahifa yuklanganda.  UI ga ma'lumotlar chiqarish
+document.addEventListener("DOMContentLoaded", function () {
+  let cars = getData();
+  cars.length &&
+    cars.forEach((car) => {
+      let card = createCard(car);
+      dataWrapper.innerHTML += card;
+    });
+
+  let moreButtons = document.querySelectorAll("button.more");
+  moreButtons.length && moreButtons.forEach(more => {
+    more && more.addEventListener('click', function() {
+       let id = this.getAttribute('data-id').substring(5);
+       console.log(id);
+    })
+  })
+});
